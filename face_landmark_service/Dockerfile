@@ -1,5 +1,5 @@
 # Use TensorFlow GPU image
-FROM tensorflow/tensorflow:2.18.0-gpu
+FROM python:3.12-slim
 
 WORKDIR /app
 

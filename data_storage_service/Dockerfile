@@ -1,20 +1,17 @@
 # Use TensorFlow GPU image
-FROM tensorflow/tensorflow:2.18.0-gpu
+FROM python:3.12-slim
 
 WORKDIR /app
 
-# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade-strategy=only-if-needed -r requirements.txt
 
-# Copy project files
-COPY . .
-
-# Generate gRPC files
+COPY ../aggregator.proto .
 RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. aggregator.proto
+
+COPY . .
 
 # Expose required ports
 EXPOSE 50053
 
-# Command to run the service (replace with actual script name)
 CMD ["python", "data_storage_service.py"]

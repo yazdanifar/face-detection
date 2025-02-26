@@ -1,6 +1,9 @@
 redis
 deepface
+grpcio
 grpcio-tools
+protobuf
+tf_keras
 opencv-python
 
 

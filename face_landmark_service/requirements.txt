@@ -1,6 +1,8 @@
 mediapipe
 redis
+grpcio
 grpcio-tools
+protobuf
 opencv-python
 
 
