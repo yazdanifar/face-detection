@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_URL=redis://redis:6379
+
+  face_landmark_service:
+    build: ./face_landmark_service
+    container_name: face_landmark_service
+    restart: always
+    ports:
+      - "50051:50051"
+    depends_on:
+      - redis
+      - data_storage_service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - face_landmark_models:/root/.deepface
+      - mediapipe_models:/root/.cache/mediapipe
+
+  age_gender_service:
+    build: ./age_gender_service
+    container_name: age_gender_service
+    restart: always
+    ports:
+      - "50052:50052"
+    depends_on:
+      - redis
+      - data_storage_service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - face_landmark_models:/root/.deepface
+      - mediapipe_models:/root/.cache/mediapipe
+
+  data_storage_service:
+    build: ./data_storage_service
+    container_name: data_storage_service
+    restart: always
+    ports:
+      - "50053:50053"
+    volumes:
+      - ./output:/app/output
+    environment:
+      - REDIS_URL=redis://redis:6379
+
+  image_input_service:
+    build: ./image_input_service
+    container_name: image_input_service
+    restart: always
+    depends_on:
+      - face_landmark_service
+      - age_gender_service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./data:/app/data
+      - face_landmark_models:/root/.deepface
+      - mediapipe_models:/root/.cache/mediapipe
+
+volumes:
+  face_landmark_models:
+  mediapipe_models:

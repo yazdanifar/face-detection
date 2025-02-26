@@ -1,0 +1,16 @@
+# Use TensorFlow GPU image
+FROM tensorflow/tensorflow:2.18.0-gpu
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir  --upgrade-strategy=only-if-needed -r requirements.txt
+
+COPY aggregator.proto .
+RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. aggregator.proto
+
+COPY . .
+
+EXPOSE 50051
+
+CMD ["python", "face_landmark_service.py"]

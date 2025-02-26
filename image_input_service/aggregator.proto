@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package aggregator;
+
+// Service definitions
+service FaceLandmarkDetection {
+    rpc DetectLandmarks (ImageRequest) returns (LandmarkResponse);
+}
+
+service AgeGenderEstimation {
+    rpc EstimateAgeGender (ImageRequest) returns (AgeGenderResponse);
+}
+
+service DataStorage {
+    rpc SaveFaceAttributes (FaceResult) returns (FaceResultResponse);
+}
+
+// Message definitions
+message ImageRequest {
+    bytes image_data = 1; // Image data in bytes (e.g., JPEG format)
+}
+
+message LandmarkResponse {
+    bool success = 1;
+}
+
+message AgeGenderResponse {
+    bool success = 1;
+}
+
+message FaceResult {
+    string time = 1; // Timestamp of the result
+    bytes frame = 2; // Image data in bytes
+    string redis_key = 3; // Redis key to fetch attributes
+}
+
+message FaceResultResponse {
+    bool response = 1;
+}
