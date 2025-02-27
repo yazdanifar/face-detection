@@ -1,4 +1,3 @@
-# Use TensorFlow GPU image
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -11,7 +10,6 @@ RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. aggregato
 
 COPY . .
 
-# Expose required ports
 EXPOSE 50053
 
 CMD ["python", "data_storage_service.py"]

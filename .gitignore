@@ -290,3 +290,4 @@ pyrightconfig.json
 data
 output
 .idea
+face_landmark_models

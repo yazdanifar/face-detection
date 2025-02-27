@@ -4,7 +4,7 @@ grpcio
 grpcio-tools
 protobuf
 tf_keras
-opencv-python
+opencv-python-headless
 
 
 
